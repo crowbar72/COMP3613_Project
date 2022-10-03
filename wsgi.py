@@ -7,6 +7,8 @@ from App.main import create_app
 from App.controllers import ( create_user, get_all_users_json, get_all_users )
 from App.controllers import ( create_author, get_all_authors_json, get_all_authors )
 
+from datetime import date
+
 # This commands file allow you to create convenient CLI commands for testing controllers
 
 app = create_app()
@@ -82,7 +84,7 @@ author_cli = AppGroup('author', help='author object commands')
 
 @author_cli.command("create", help="Creates an author")
 @click.argument("name", default="rob")
-@click.argument("dob", default="05-08-2001")
+@click.argument("dob", default="05/08/2001")
 @click.argument("qualifications", default="BSc. Science")
 def create_author_command(name, dob, qualifications):
     create_author(name, dob, qualifications)
@@ -92,3 +94,5 @@ def create_author_command(name, dob, qualifications):
 def list_authors():
     authors = get_all_authors_json()
     print(authors)
+
+app.cli.add_command(author_cli)

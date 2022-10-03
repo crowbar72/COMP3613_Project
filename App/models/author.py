@@ -1,8 +1,8 @@
 from App.database import db
 
 class Author(db.Model):
-    author_id = db.Column(db.Integer, db.ForeignKey("AuthorProfile.id"), primary_key=True)
-    publication_id = db.Column(db.Integer, db.ForeignKey("Publication.id"), primary_key=True)
+    author_id = db.Column(db.Integer, db.ForeignKey("authorprofile.id"), primary_key=True)
+    publication_id = db.Column(db.Integer, db.ForeignKey("publication.id"), primary_key=True)
 
     def __init__(self, author_id, publication_id):
         self.author_id = author_id

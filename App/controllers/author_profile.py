@@ -17,5 +17,5 @@ def get_all_authors_json():
     authors = AuthorProfile.query.all()
     if not AuthorProfile:
         return []
-    authors = [AuthorProfile.toJSON() for author in authors]
+    authors = [author.toJSON() for author in authors]
     return authors
