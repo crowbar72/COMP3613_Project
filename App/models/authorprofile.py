@@ -14,9 +14,9 @@ class AuthorProfile(db.Model):
 
     def toJSON(self):
         return{
-            'id': self.id,
-            'name': self.name
-            'dob': self.dob,
-            'qualifications': self.qualifications
+            'id': id,
+            'name': name,
+            'dob': dob,
+            'qualifications': qualifications
         }
 

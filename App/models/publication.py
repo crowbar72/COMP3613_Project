@@ -10,6 +10,5 @@ class Publication(db.Model):
     
     def toJSON(self):
         return{
-            "title": self.title,
-            "author"
+            "title": self.title
         }
