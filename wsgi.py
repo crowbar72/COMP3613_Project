@@ -96,3 +96,19 @@ def list_authors():
     print(authors)
 
 app.cli.add_command(author_cli)
+
+# publications
+publication_cli = AppGroup('pub', help='pub object commands') 
+
+@publication_cli.command("create", help="Creates a publication")
+@click.argument("title", default="Computer Science 1st Edition")
+def create_publication_command(title):
+    create_publication(title)
+    print(f'{name} created!')
+
+@publication_cli.command("list")
+def list_publications():
+    publications = get_all_publications_json()
+    print(publications)
+
+app.cli.add_command(publication_cli)

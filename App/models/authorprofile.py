@@ -7,7 +7,7 @@ class AuthorProfile(db.Model):
     name =  db.Column(db.String, nullable=False)
     dob = db.Column(db.DateTime, nullable=False)
     qualifications = db.Column(db.String(120), nullable=False)
-    publications = db.relationship("Author")
+    # publications = db.relationship("Author")
 
     def __init__(self, name, dob, qualifications):
         self.name = name
