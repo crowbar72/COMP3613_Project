@@ -2,8 +2,8 @@ from App.database import db
 # from .author import *
 from .authorprofile import *
 
-AuthorTable = db.Table(
-    "authortable",
+AuthorPublication = db.Table(
+    "authorpublication",
     db.Column("authorprofile_id", db.ForeignKey("authorprofile.id"), primary_key=True),
     db.Column("publication_id", db.ForeignKey("publication.id"), primary_key=True),
 )
