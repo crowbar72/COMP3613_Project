@@ -21,10 +21,17 @@ def get_all_authors_json():
     return authors
 
 def get_author_by_name(name):
+    print(name)
     authors = Author.query.filter_by(name=name)
-    # if not authors:
-    #     return []
     authors = [author for author in authors]
-    print(authors)
+    # print([author.toJSON() for author in authors])
+    if not authors:
+        new_author = create_author(name=name, dob=None, qualifications=None)
+        authors = [new_author]
+        return authors
     return authors
+
+def get_author_publications(id):
+    author = get_author(id)
+    return author.get_publications()
     
