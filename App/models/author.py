@@ -1,17 +1,26 @@
 from App.database import db
+from datetime import *
 
+class Author(db.Model):
+    __tablename__ = "author"
+    id = db.Column(db.Integer, primary_key=True)
+    name =  db.Column(db.String, nullable=False)
+    dob = db.Column(db.DateTime, nullable=True)
+    qualifications = db.Column(db.String(120), nullable=True)
+    # publications = db.relationship("Author")
 
-# class Author(db.Model):
-#     author_id = db.Column(db.Integer, db.ForeignKey("authorprofile.id"), primary_key=True)
-#     publication_id = db.Column(db.Integer, db.ForeignKey("publication.id"), primary_key=True)
+    def __init__(self, name, dob, qualifications):
+        self.name = name
+        if dob:
+            self.dob = datetime.strptime(dob, "%d/%m/%Y")
+        if qualifications:
+            self.qualifications = qualifications
 
-#     def __init__(self, author_id, publication_id):
-#         self.author_id = author_id
-#         self.publication_id = publication_id
-
-#     def toJSON(self):
-#         return{
-#             'author_id': author_id,
-#             'publication_id': publication_id
-#         }
+    def toJSON(self):
+        return{
+            'id': self.id,
+            'name': self.name,
+            'dob': self.dob,
+            'qualifications': self.qualifications
+        }
 

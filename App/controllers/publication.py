@@ -1,21 +1,21 @@
-from App.models import AuthorProfile
+from App.models import Publication
 from App.database import db
 
-def create_author(name, dob, qualifications):
-    new_author = AuthorProfile(name=name, dob=dob, qualifications=qualifications)
-    db.session.add(new_author)
+def create_publication(title, authors, coauthors):
+    new_publication = Publication(title, authors, coauthors)
+    db.session.add(new_publication)
     db.session.commit()
-    return new_author
+    return new_publication
 
-def get_author(id):
-    return AuthorProfile.query.get(id)
+def get_publication(id):
+    return Publication.query.get(id)
 
-def get_all_authors():
-    return AuthorProfile.query.all()
+def get_all_publications():
+    return Publication.query.all()
 
-def get_all_authors_json():
-    authors = AuthorProfile.query.all()
-    if not AuthorProfile:
+def get_all_publications_json():
+    publications = Publication.query.all()
+    if not publications:
         return []
-    authors = [author.toJSON() for author in authors]
-    return authors
+    publications = [publication.toJSON() for publication in publications]
+    return publications
