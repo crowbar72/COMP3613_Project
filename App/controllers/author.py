@@ -24,7 +24,7 @@ def get_author_by_name(name):
     print(name)
     authors = Author.query.filter_by(name=name)
     authors = [author for author in authors]
-    # print([author.toJSON() for author in authors])
+    # this code should be in a different method
     if not authors:
         new_author = create_author(name=name, dob=None, qualifications=None)
         authors = [new_author]
