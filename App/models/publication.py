@@ -34,3 +34,9 @@ class Publication(db.Model):
             "coauthors": [coauthor.toJSON() for coauthor in self.coauthors]
         }
 
+    def toJSON2(self):
+        return{
+            "id": self.id,
+            "title": self.title, 
+        }
+
