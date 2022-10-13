@@ -69,6 +69,8 @@ def post_publication():
     coauthors = sum ( [get_author_by_name(name) for name in coauthor_names], [] )
     # return jsonify(author_names)
     new_pub = create_publication(data['title'], authors, coauthors)
+    if not new_pub:
+        return "Could not create.", 400
     return new_pub.toJSON, 201
 
 @user_views.route('/author', methods=["POST"])
