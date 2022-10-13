@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, jsonify, request, send_from_directory
 from flask_jwt import jwt_required
-
+# for exceptions
+import sys
 
 from App.controllers import (
     create_user, 
@@ -68,17 +69,21 @@ def post_publication():
     authors = sum ( [get_author_by_name(name) for name in author_names], [] )
     coauthors = sum ( [get_author_by_name(name) for name in coauthor_names], [] )
     # return jsonify(author_names)
-    new_pub = create_publication(data['title'], authors, coauthors)
-    if not new_pub:
-        return "Could not create.", 400
-    return new_pub.toJSON, 201
+    try:
+        new_pub = create_publication(data['title'], authors, coauthors)
+    except Exception as e:
+        return f'Could not create due to exception: {e.__class__}', 400
+    return new_pub.toJSON(), 201
 
 @user_views.route('/author', methods=["POST"])
 @jwt_required()
 def create_author_profile():
     data = request.get_json()
     # return jsonify(data)
-    new_author = create_author(data['name'], data['dob'], data['qualifications'])
+    try:
+        new_author = create_author(data['name'], data['dob'], data['qualifications'])
+    except Exception as e:
+        return f'Could not create due to exception: {e.__class__}', 400 
     return new_author.toJSON(), 201
 
 @user_views.route('/author', methods=["GET"])
