@@ -33,5 +33,13 @@ def get_author_by_name(name):
 
 def get_author_publications(id):
     author = get_author(id)
+    if not author:
+        return []
+    return author.get_publications()
+
+def getpublicationtree(id):
+    author = get_author(id)
+    if not author:
+        return []
     return author.get_publications()
     
