@@ -27,13 +27,26 @@ def client_app():
 def static_user_page():
   return send_from_directory('static', 'static-user.html')
 
+@user_views.route('/signup', methods=["POST"])
+def create_user_route():
+    data = request.get_json()
+    if not data:
+        return "Missing request body.", 400
+    username = data['username']
+    password = data['password']
+    if not username or not password:
+        return "Missing username or password parameter.", 400
+    user = create_user(username, password)
+    if not user:
+        return "Failed to create.", 400
+    return user.toJSON(), 201
 
 @user_views.route('/publications', methods=["GET"])
 def get_publications():
     args = request.args
     if not args:
         pubs = get_all_publications_json()
-        return jsonify(pubs)
+        return jsonify(pubs), 200
     author_id = args.get("author")
     query = args.get("query")
     pubs = []
@@ -43,10 +56,11 @@ def get_publications():
         query = query.lower()
         print(query)
         pubs = filter(lambda pub: query in pub['title'].lower(), pubs)
-    return jsonify(list(pubs))
+    return jsonify(list(pubs)), 200
         
 
 @user_views.route('/publications', methods=["POST"])
+@jwt_required()
 def post_publication():
     data = request.get_json()
     author_names = data['authors']
@@ -55,14 +69,15 @@ def post_publication():
     coauthors = sum ( [get_author_by_name(name) for name in coauthor_names], [] )
     # return jsonify(author_names)
     new_pub = create_publication(data['title'], authors, coauthors)
-    return f'{new_pub.title} was created.', 200
+    return new_pub.toJSON, 201
 
 @user_views.route('/author', methods=["POST"])
+@jwt_required()
 def create_author_profile():
     data = request.get_json()
     # return jsonify(data)
     new_author = create_author(data['name'], data['dob'], data['qualifications'])
-    return f'{new_author.name} was created.', 200
+    return new_author.toJSON(), 201
 
 @user_views.route('/author', methods=["GET"])
 def get_author_profile():
