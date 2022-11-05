@@ -80,7 +80,11 @@ class PublicationUnitTests(unittest.TestCase):
         coauthor = Author("Bob Dule", "06/09/2002", "BSc. Computer Engineering")
         coauthors.append(coauthor)
         publication = Publication("Intro to Computer Science", authors, coauthors)
-        assert publication.title=="Intro to Computer Science" and publication.authors==authors and publication.coauthors==coauthors
+        assert (
+            publication.title=="Intro to Computer Science" 
+            and publication.authors==authors 
+            and publication.coauthors==coauthors
+        )
 
     def test_publication_toJSON(self):
         authors = []
