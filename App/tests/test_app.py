@@ -12,7 +12,13 @@ from App.controllers import (
     authenticate,
     get_user,
     get_user_by_username,
-    update_user
+    update_user,
+    create_publication,
+    get_all_authors_json,
+    create_author,
+    create_publication,
+    get_all_publications_json,
+    get_author
 )
 
 from wsgi import app
@@ -61,16 +67,6 @@ class AuthorUnitTests(unittest.TestCase):
             "qualifications": "BSc. Computer Science"
         })
 
-    # def test_get_author_publications(self):
-    #     # create author, create publication for that author, call author.get_publications
-    #     authors = []
-    #     author = Author("Bob Moog", "05/08/2001", "BSc. Computer Science")
-    #     authors.append(author)
-    #     publication = Publication("Intro to Computer Science", authors, [])
-    #     author_publications = author.get_publications()
-    #     # assert true if equal
-    #     self.assertDictEqual(author_publications.pop(), publication.toJSON())
-
 class PublicationUnitTests(unittest.TestCase):
     def test_new_publication(self):
         authors = []
@@ -117,33 +113,63 @@ def empty_db():
 
 
 def test_authenticate():
-    user = create_user("Bob Moog", "bobpass")
+    user = create_user("bob", "bobpass")
     assert authenticate("bob", "bobpass") != None
 
 class UsersIntegrationTests(unittest.TestCase):
-
-    def test_create_author(self):
-        author = create_user("Bob Moog", "05/08/2001", "BSc. Computer Science")
-        assert author.name == "Bob Moog"
-
-    def test_create_publication(self):
-        publication=create_publication([{"title":"Intro to Computer Science"},{"authors":[author.toJSON() for author in authors]},{"coauthors":[coauthor.toJSON() for coauthor in coauthors]}])\
-        assert publication.title=="Intro to Computer Science"
-
-    def test_get_author_json(self):
-        author_json=get_author_json()
-        self.assertListEqual([{"name": "Bob Moog"},{"dob":"05/08/2001"},{"qualifications":"BSc. Computer Engineering"}], author_json)
-
-
-    def test_get_publication_json(self):
-        publication_json= get_publication_json()
-        self.assertListEqual([{"title":"Intro to Computer Science"},{"authors":[author.toJSON() for author in authors]},{"coauthors":[coauthor.toJSON() for coauthor in coauthors]}])
+    def test_create_user(self):
+        user = create_user("bob", "bobpass")
+        user = create_user("rick", "bobpass")
+        assert user.username == "rick"
 
     def test_get_all_users_json(self):
         users_json = get_all_users_json()
         self.assertListEqual([{"id":1, "username":"bob"}, {"id":2, "username":"rick"}], users_json)
 
+    # Tests data changes in the database
     def test_update_user(self):
         update_user(1, "ronnie")
         user = get_user(1)
         assert user.username == "ronnie"
+
+
+class AuthorIntegrationTests(unittest.TestCase):
+    def test_create_author(self):
+        author = create_author("Bob Moog", "05/08/2001", "BSc. Computer Science")
+        assert author.name == "Bob Moog"
+
+    def test_get_all_authors_json(self):
+        author_json=get_all_authors_json()
+        self.assertListEqual([{
+            "id": 1,
+            "name": "Bob Moog",
+            "dob":datetime.strptime("05/08/2001", "%d/%m/%Y"),
+            "qualifications":"BSc. Computer Science"
+            }
+            ], author_json)
+
+class PublicationIntegrationTests(unittest.TestCase):
+    def test_create_publication(self):
+        authors = [create_author("Bob Moog", "05/08/2001", "BSc. Computer Science")]
+        coauthors = []
+        publication=create_publication("Intro to Computer Science",authors, coauthors)
+        assert publication.title=="Intro to Computer Science"
+
+
+    def test_get_publication_json(self):
+        publication_json= get_all_publications_json()
+        self.assertListEqual([
+            {
+                "id": 1,
+                "title":"Intro to Computer Science",
+                "authors":[
+                    {
+                        "id": 1,
+                        "name": "Bob Moog",
+                        "dob": datetime.strptime("05/08/2001", "%d/%m/%Y"),
+                        "qualifications": "BSc. Computer Science"
+                    }
+                ],
+                "coauthors":[]
+            }
+        ], publication_json)
