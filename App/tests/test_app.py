@@ -112,13 +112,17 @@ def empty_db():
     os.unlink(os.getcwd()+'/App/test.db')
 
 
-def test_authenticate():
-    user = create_user("bob", "bobpass")
-    assert authenticate("bob", "bobpass") != None
+# def test_authenticate():
+#     user = create_user("bob", "bobpass")
+#     assert authenticate("bob", "bobpass") != None
 
 class UsersIntegrationTests(unittest.TestCase):
-    def test_create_user(self):
+    def test_authenticate(self):
         user = create_user("bob", "bobpass")
+        assert authenticate("bob", "bobpass") != None
+
+    def test_create_user(self):
+        # user = create_user("bob", "bobpass")
         user = create_user("rick", "bobpass")
         assert user.username == "rick"
 
@@ -141,7 +145,7 @@ class AuthorIntegrationTests(unittest.TestCase):
     def test_get_all_authors_json(self):
         author_json=get_all_authors_json()
         self.assertListEqual([{
-            "id": 1,
+            'id': 1,
             "name": "Bob Moog",
             "dob":datetime.strptime("05/08/2001", "%d/%m/%Y"),
             "qualifications":"BSc. Computer Science"
@@ -150,14 +154,21 @@ class AuthorIntegrationTests(unittest.TestCase):
 
 class PublicationIntegrationTests(unittest.TestCase):
     def test_create_publication(self):
-        authors = [create_author("Bob Moog", "05/08/2001", "BSc. Computer Science")]
+        author = get_author(1)
+        authors = []
+        if author:
+            authors.append(author)
+        else:
+            authors.append(create_author("Bob Moog", "05/08/2001", "BSc. Computer Science"))
+            
+            
         coauthors = []
         publication=create_publication("Intro to Computer Science",authors, coauthors)
         assert publication.title=="Intro to Computer Science"
 
 
     def test_get_publication_json(self):
-        publication_json= get_all_publications_json()
+        publication_json = get_all_publications_json()
         self.assertListEqual([
             {
                 "id": 1,
