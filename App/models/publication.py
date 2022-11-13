@@ -6,7 +6,7 @@ class Publication(db.Model):
     __tablename__ = "publication"
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120), nullable=False, unique=True)
-    authorId = db.Column(db.Integer, ForeignKey("parent_table.id"). nullable=False)
+    authorId = db.Column(db.Integer, db.ForeignKey("author.id"), nullable=False)
     coauthors = db.relationship("Author", secondary=CoAuthorPublication)
 
     def __init__(self, title, authorId, coauthors):

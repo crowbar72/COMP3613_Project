@@ -5,7 +5,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username =  db.Column(db.String, nullable=False)
     password = db.Column(db.String(120), nullable=False)
-    authorId = db.Column(db.Integer, ForeignKey('author.id'), nullable=False)
+    authorId = db.Column(db.Integer, db.ForeignKey('author.id'), nullable=False)
 
     def __init__(self, username, password, authorId):
         self.username = username
@@ -15,7 +15,7 @@ class User(db.Model):
     def toJSON(self):
         return{
             'id': self.id,
-            'username': self.username
+            'username': self.username,
             'authorId': self.authorId
         }
 
