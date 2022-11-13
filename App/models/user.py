@@ -5,7 +5,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username =  db.Column(db.String, nullable=False)
     password = db.Column(db.String(120), nullable=False)
-    author_id = db.Column(Integer, ForeignKey('author.id'))
+    authorId = db.Column(Integer, ForeignKey('author.id'))
     author = db.relationship('Author', backref='author', uselist=False)
 
     def __init__(self, username, password, authorId):
@@ -17,6 +17,7 @@ class User(db.Model):
         return{
             'id': self.id,
             'username': self.username
+            'authorId': self.authorId
         }
 
     def set_password(self, password):

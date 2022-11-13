@@ -9,9 +9,9 @@ class Publication(db.Model):
     authorId = db.Column(db.Integer, ForeignKey("parent_table.id"). nullable=False)
     coauthors = db.relationship("Author", secondary=CoAuthorPublication)
 
-    def __init__(self, title, author, coauthors):
+    def __init__(self, title, authorId, coauthors):
         self.title = title
-        self.author.extend(author)
+        self.authorId = authorId
         if coauthors:
             self.coauthors.extend(coauthors)
     

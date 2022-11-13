@@ -29,5 +29,6 @@ class Author(db.Model):
             'name': self.name,
             'dob': self.dob,
             'qualifications': self.qualifications,
+            'userId': self.userId
         }
 
