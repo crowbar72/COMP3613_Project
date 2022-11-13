@@ -5,10 +5,13 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username =  db.Column(db.String, nullable=False)
     password = db.Column(db.String(120), nullable=False)
+    author_id = db.Column(Integer, ForeignKey('author.id'))
+    author = db.relationship('Author', backref='author', uselist=False)
 
-    def __init__(self, username, password):
+    def __init__(self, username, password, authorId):
         self.username = username
         self.set_password(password)
+        self.authorId = authorId
 
     def toJSON(self):
         return{
