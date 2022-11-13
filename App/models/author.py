@@ -9,16 +9,15 @@ class Author(db.Model):
     dob = db.Column(db.DateTime, nullable=True)
     qualifications = db.Column(db.String(120), nullable=True)
     userId = db.Column(db.Integer, ForeignKey("user.id"), nullable = True)
-    publications = db.relationship("Publication", secondary=AuthorPublication, viewonly=True)    
+    user = db.relationship('User', backref='user', uselist=False)
+    publications = db.relationship("Publication", secondary=AuthorPublication, viewonly=True)
 
-    def __init__(self, name, dob, qualifications, userId):
+    def __init__(self, name, dob, qualifications):
         self.name = name
         if dob:
             self.dob = datetime.strptime(dob, "%d/%m/%Y")
         if qualifications:
             self.qualifications = qualifications
-        if userId:
-            self.userId = userId
 
     def get_publications(self):
         return [publication.toJSON() for publication in self.publications]
