@@ -19,6 +19,6 @@ class Publication(db.Model):
         return{
             "id": self.id,
             "title": self.title, 
-            "author": Author.query.get(id).toJSON(),
+            "author": self.authorId,
             "coauthors": [coauthor.toJSON() for coauthor in self.coauthors]
         }
