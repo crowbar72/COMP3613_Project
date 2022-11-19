@@ -8,7 +8,8 @@ class Author(db.Model):
     name =  db.Column(db.String, nullable=False)
     dob = db.Column(db.DateTime, nullable=True)
     qualifications = db.Column(db.String(120), nullable=True)
-    publications = db.relationship("Publication", secondary=AuthorPublication, viewonly=True)
+    user = db.relationship('User', backref='user', uselist=False)
+    publications = db.relationship("Publication", backref='user')
 
     def __init__(self, name, dob, qualifications):
         self.name = name
@@ -18,8 +19,10 @@ class Author(db.Model):
             self.qualifications = qualifications
 
     def get_publications(self):
-        # return [publication.toJSON() for publication in self.publications]
         return [publication.toJSON() for publication in self.publications]
+
+    def set_user(self, user):
+        self.user = user
 
     def toJSON(self):
         return{

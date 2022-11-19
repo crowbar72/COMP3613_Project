@@ -32,23 +32,23 @@ LOGGER = logging.getLogger(__name__)
 class UserUnitTests(unittest.TestCase):
 
     def test_new_user(self):
-        user = User("bob", "bobpass")
+        user = User("bob", "bobpass", 1)
         assert user.username == "bob"
 
     def test_user_toJSON(self):
-        user = User("bob", "bobpass")
+        user = User("bob", "bobpass", 1)
         user_json = user.toJSON()
-        self.assertDictEqual(user_json, {"id":None, "username":"bob"})
+        self.assertDictEqual(user_json, {"id":None, "username":"bob", "authorId":1})
     
     def test_hashed_password(self):
         password = "mypass"
         hashed = generate_password_hash(password, method='sha256')
-        user = User("bob", password)
+        user = User("bob", password, 1)
         assert user.password != password
 
     def test_check_password(self):
         password = "mypass"
-        user = User("bob", password)
+        user = User("bob", password, 1)
         assert user.check_password(password)
 
 class AuthorUnitTests(unittest.TestCase):
@@ -69,32 +69,28 @@ class AuthorUnitTests(unittest.TestCase):
 
 class PublicationUnitTests(unittest.TestCase):
     def test_new_publication(self):
-        authors = []
         coauthors = []
         author = Author("Bob Moog", "05/08/2001", "BSc. Computer Science")
-        authors.append(author)
         coauthor = Author("Bob Dule", "06/09/2002", "BSc. Computer Engineering")
         coauthors.append(coauthor)
-        publication = Publication("Intro to Computer Science", authors, coauthors)
+        publication = Publication("Intro to Computer Science", author.id, coauthors)
         assert (
             publication.title=="Intro to Computer Science" 
-            and publication.authors==authors 
+            and publication.authorId==author.id
             and publication.coauthors==coauthors
         )
 
     def test_publication_toJSON(self):
-        authors = []
         coauthors = []
         author = Author("Bob Moog", "05/08/2001", "BSc. Computer Science")
-        authors.append(author)
         coauthor = Author("Bob Dule", "06/09/2002", "BSc. Computer Engineering")
         coauthors.append(coauthor)
-        publication = Publication("Intro to Computer Science", authors, coauthors)
+        publication = Publication("Intro to Computer Science", author.id, coauthors)
         publication_json = publication.toJSON()
         self.assertDictEqual(publication_json, {
             "id": None,
             "title": "Intro to Computer Science",
-            "authors": [author.toJSON() for author in authors],
+            "author": None,
             "coauthors": [coauthor.toJSON() for coauthor in coauthors]
         })
 
@@ -118,17 +114,17 @@ def empty_db():
 
 class UsersIntegrationTests(unittest.TestCase):
     def test_authenticate(self):
-        user = create_user("bob", "bobpass")
+        user = create_user("bob", "bobpass", 1)
         assert authenticate("bob", "bobpass") != None
 
     def test_create_user(self):
         # user = create_user("bob", "bobpass")
-        user = create_user("rick", "bobpass")
+        user = create_user("rick", "bobpass", 2)
         assert user.username == "rick"
 
     def test_get_all_users_json(self):
         users_json = get_all_users_json()
-        self.assertListEqual([{"id":1, "username":"bob"}, {"id":2, "username":"rick"}], users_json)
+        self.assertListEqual([{"id":1, "username":"bob", "authorId":1}, {"id":2, "username":"rick", "authorId":2}], users_json)
 
     # Tests data changes in the database
     def test_update_user(self):
@@ -155,17 +151,11 @@ class AuthorIntegrationTests(unittest.TestCase):
 class PublicationIntegrationTests(unittest.TestCase):
     def test_create_publication(self):
         author = get_author(1)
-        authors = []
-        if author:
-            authors.append(author)
-        else:
-            authors.append(create_author("Bob Moog", "05/08/2001", "BSc. Computer Science"))
-            
-            
+        if not author:
+            author = create_author("Bob Moog", "05/08/2001", "BSc. Computer Science")
         coauthors = []
-        publication=create_publication("Intro to Computer Science",authors, coauthors)
+        publication=create_publication("Intro to Computer Science",author.id, coauthors)
         assert publication.title=="Intro to Computer Science"
-
 
     def test_get_publication_json(self):
         publication_json = get_all_publications_json()
@@ -173,14 +163,7 @@ class PublicationIntegrationTests(unittest.TestCase):
             {
                 "id": 1,
                 "title":"Intro to Computer Science",
-                "authors":[
-                    {
-                        "id": 1,
-                        "name": "Bob Moog",
-                        "dob": datetime.strptime("05/08/2001", "%d/%m/%Y"),
-                        "qualifications": "BSc. Computer Science"
-                    }
-                ],
+                "author":1,
                 "coauthors":[]
             }
         ], publication_json)

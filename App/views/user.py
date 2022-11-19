@@ -7,9 +7,11 @@ from App.controllers import (
     create_user, 
     get_all_users,
     get_all_users_json,
+    create_author,
+    get_all_authors_json
 )
 
-from App.controllers import *
+from App.controllers import *   
 
 user_views = Blueprint('user_views', __name__, template_folder='../templates')
 
@@ -33,11 +35,19 @@ def create_user_route():
     data = request.get_json()
     if not data:
         return "Missing request body.", 400
+
+    try:
+        new_author = create_author(data['name'], data['dob'], data['qualifications'])
+    except Exception as e:
+        return f'Could not create due to exception: {e.__class__}', 400 
+    new_author = new_author.toJSON()
+
     username = data['username']
     password = data['password']
     if not username or not password:
         return "Missing username or password parameter.", 400
-    user = create_user(username, password)
+    
+    user = create_user(username, password, new_author['id'])
     if not user:
         return "Failed to create.", 400
     return user.toJSON(), 201
@@ -64,10 +74,10 @@ def get_publications():
 @jwt_required()
 def post_publication():
     data = request.get_json()
-    author_names = data['authors']
+    author_name = data['author']
     coauthor_names = data['coauthors']
-    authors = sum ( [get_author_by_name(name) for name in author_names], [] )
-    coauthors = sum ( [get_author_by_name(name) for name in coauthor_names], [] )
+    author = get_author_by_name(author_name)
+    coauthors = [get_author_by_name(name) for name in coauthor_names]
     # return jsonify(author_names)
     try:
         new_pub = create_publication(data['title'], authors, coauthors)
@@ -77,7 +87,7 @@ def post_publication():
 
 @user_views.route('/author', methods=["POST"])
 @jwt_required()
-def create_author_profile():
+def create_author_route():
     data = request.get_json()
     # return jsonify(data)
     try:
@@ -87,7 +97,7 @@ def create_author_profile():
     return new_author.toJSON(), 201
 
 @user_views.route('/author', methods=["GET"])
-def get_author_profile():
+def get_author_route():
     authors = get_all_authors_json()
     return jsonify(authors)
 
