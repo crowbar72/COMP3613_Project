@@ -8,7 +8,8 @@ def create_author(name, dob, qualifications):
     return new_author
 
 def check_author_exists(name):
-    author = Author.query.filter_by(name=name)
+    print(name)
+    author = Author.query.filter_by(name=name).first()
     if not author:
         new_author = create_author(name=name, dob=None, qualifications=None)
         return new_author
