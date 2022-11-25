@@ -9,7 +9,7 @@ from App.controllers import (
     get_all_authors_json,
     get_author_by_name,
     get_author_publications,
-    getpublicationtree
+    get_author_publication_tree
 )
 
 author_views = Blueprint('author_views', __name__, template_folder='../templates')
@@ -36,5 +36,10 @@ def get_pub_tree():
     author_id = args.get('author_id')
     if not author_id:
         return "Must provide ID.", 400
-    pubs = get_author_publications(author_id)
-    return jsonify(pubs)
+    treeList = []
+    treeList = get_author_publication_tree(author_id, treeList)
+    authorList = []
+    for id in treeList:
+        author = get_author(id)
+        authorList.append(author.toJSON())
+    return jsonify(authorList)
