@@ -23,5 +23,5 @@ def search_results_page():
     return render_template('results.html')
 
 @index_views.route('/pubtree', methods=['GET'])
-def search_results_page():
+def publication_tree_page():
     return render_template('pubtree.html')
