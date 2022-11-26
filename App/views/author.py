@@ -30,7 +30,7 @@ def get_author_route():
     authors = get_all_authors_json()
     return jsonify(authors)
 
-@author_views.route('/pubtree', methods=['GET'])
+@author_views.route('/api/pubtree', methods=['GET'])
 def get_pub_tree():
     args = request.args
     author_id = args.get('author_id')
