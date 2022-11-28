@@ -2,9 +2,44 @@
 {% block title %}DAC Publication Listing{% endblock %}
 {% block page %}DAC Publication Listing{% endblock %}
 
+{% block link%}
+<ul id="nav-mobile" class="right">
+<li><a href="/App/templates/signup.html">Signup</a></li>
+</ul>
+
+<ul id="nav-mobile" class="left">
+<li><a href="/App/templates/index.html">DAC Publication Listing</a></li>
+</ul>
+
+{% endblock %}
+
 {{ super() }}
 
-{% block content %}
+<!-- {% block content %}
     <h1>Login page</h1>
     <p>Fields for username and password to go here. Should have button for sigup page</p>
+{% endblock %} -->
+
+{% block content %}
+<main class="container">
+<form class="card col s12" id="loginForm" method="POST" action="/App/templates/index.html" style="padding:1em">
+<div class="row">
+<div class="input-field col s12">
+<input placeholder="" name="username" type="text" class="validate">
+<label for="username">Username</label>
+</div>
+</div>
+
+<div class="row">
+<div class="input-field col s12">
+<input name="password" type="password" class="validate">
+<label for="password">Password</label>
+</div>
+</div>
+
+<div class="card-action">
+<input type="submit" class="blue text-white btn">
+</div>
+</form>
+</main>
 {% endblock %}

@@ -4,7 +4,83 @@
 
 {{ super() }}
 
-{% block content %}
+<!-- {% block content %}
     <h1>New publication page</h1>
     <p>Fields for a new publication to go here. Should have button for home page</p>
+{% endblock %} -->
+
+{% block content %}
+    {% if current_user.is_aunthenticated %}
+    <ul id="nav-mobile" class="left">
+    <li><a href="/App/templates/index.html">DAC Publication Listing</a></li>
+    </ul>
+
+    <ul id="nav-mobile" class="right">
+    <li><a href="/App/templates/pubtree.html">Publication Tree</a></li>
+    </ul>
+        
+    <ul id="nav-mobile" class="right">
+    <li><a href="/App/templates/newpub.html">Create Publication</a></li>
+    </ul>
+
+    <ul id="nav-mobile" class="left">
+    <h4> {{ current_user.username }}  </h4>
+    </ul>
+
+    <h2>Create Publication for: {{current_user.name}}</h2>
+
+    <main class="container">
+        <form class="card col s12" id="loginForm" method="POST" action="/App/templates/index.html" style="padding:1em">
+        <div class="row">
+        <div class="input-field col s12">
+        <input placeholder="Title" name="title" type="text">
+        <label for="title"></label>
+        </div>
+        </div>
+
+        <div class="row">
+        </div>
+
+        <div class="row">
+        <div class="input-field col s12">
+        <input placeholder="Date of Publication" name="DOP" type="text">
+        <label for="DOP"></label>
+        </div>
+        </div>
+
+        <div class="row">
+        </div>
+
+        <div class="row">
+        <div class="input-field col s12">
+        <input placeholder="Date of Publication" name="DOP" type="text">
+        <label for="DOP"></label>
+        </div>
+        </div>
+
+        <div class="row">
+        <div class="input-field col s12">
+        <input placeholder="Co-Authors" name="coauthors" type="textarea">
+        <label for="coauthors"></label>
+        </div>
+        </div>
+
+        <div class="row">
+        </div>
+
+        <div class="row">
+        <div class="input-field col s12">
+        <input placeholder="Abstract" name="abstract" type="textarea">
+        <label for="abstract"></label>
+        </div>
+        </div>
+
+        <div class="card-action">
+        <input type="submit" class="blue text-white btn">
+        </div>
+        </form>
+        </main>
+
+
+    
 {% endblock %}

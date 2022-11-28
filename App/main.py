@@ -68,3 +68,8 @@ def create_app(config={}):
     setup_jwt(app)
     app.app_context().push()
     return app
+
+    @app.route('App/', methods=['GET'])
+    @login_required
+    def loggedin():
+        return render_template('index.html', user=current_user)

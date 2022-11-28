@@ -4,7 +4,65 @@
 
 {{ super() }}
 
-{% block content %}
+<!-- {% block content %}
     <h1>Home page</h1>
     <p>Should have a search bar that at least searches by name. Menu should include a login/signup button or new publication</p>
+{% endblock %} -->
+
+{% block content %}
+    {% if current_user.is_aunthenticated %}
+    <ul id="nav-mobile" class="left">
+    <li><a href="/App/templates/index.html">DAC Publication Listing</a></li>
+    </ul>
+
+    <ul id="nav-mobile" class="right">
+    <li><a href="/App/templates/pubtree.html">Publication Tree</a></li>
+    </ul>
+        
+    <ul id="nav-mobile" class="right">
+    <li><a href="/App/templates/newpub.html">Create Publication</a></li>
+    </ul>
+
+    <ul id="nav-mobile" class="left">
+    <h4> {{ current_user.name }}  </h4>
+    </ul>
+    
 {% endblock %}
+
+
+{% block content %}
+    {% if !current_user.is_aunthenticated %}
+<ul id="nav-mobile" class="left">
+<li><a href="/index">DAC Publication Listing</a></li>
+</ul>
+
+<ul id="nav-mobile" class="right">
+<li><a href="/signup">SignUp/Login</a></li>
+</ul>
+
+{% endblock %}
+
+{% block content %}
+
+<form method="POST" action="/App/templates/index.html">
+<div class="row">
+<div class="input-field col s12">
+<input placeholder="Search" name="Author Name" type="text">
+<label for="author">Search For Author Name</label>
+<input type="submit" value="Submit">
+</form>
+</div>
+</div>
+
+<div class="row">
+</div>
+
+<form method="POST" action="/App/templates/index.html">
+<div class="row">
+<div class="input-field col s12">
+<input placeholder="Search" name="Pub Title" type="text">
+<label for="title">Search For Publication Title</label>
+<input type="submit" value="Submit">
+</form>
+</div>
+</div>
