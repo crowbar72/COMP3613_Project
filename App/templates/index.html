@@ -33,13 +33,13 @@
 
 
 {% block content %}
-    {% elif !current_user.is_aunthenticated %}
+    {% if !current_user.is_aunthenticated %}
 <ul id="nav-mobile" class="left">
-<li><a href="/index">DAC Publication Listing</a></li>
+<li><a href="/App/templates/index.html">DAC Publication Listing</a></li>
 </ul>
 
 <ul id="nav-mobile" class="right">
-<li><a href="/signup">SignUp/Login</a></li>
+<li><a href="/App/templates/signup.html">SignUp/Login</a></li>
 </ul>
 
     {% endif %}
