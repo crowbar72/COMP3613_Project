@@ -69,7 +69,7 @@ def create_app(config={}):
     app.app_context().push()
     return app
 
-    @app.route('App/', methods=['GET'])
-    @login_required
-    def loggedin():
-        return render_template('index.html', user=current_user)
+    # @app.route('App/', methods=['GET'])
+    # @login_required
+    # def loggedin():
+    #     return render_template('index.html', user=current_user)
