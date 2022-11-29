@@ -26,12 +26,14 @@
     <ul id="nav-mobile" class="left">
     <h4> {{ current_user.name }}  </h4>
     </ul>
+
+    {% endif %}
     
 {% endblock %}
 
 
 {% block content %}
-    {% if !current_user.is_aunthenticated %}
+    {% elif !current_user.is_aunthenticated %}
 <ul id="nav-mobile" class="left">
 <li><a href="/index">DAC Publication Listing</a></li>
 </ul>
@@ -40,11 +42,9 @@
 <li><a href="/signup">SignUp/Login</a></li>
 </ul>
 
-
+    {% endif %}
 
 {% endblock %}
-
-    {% else %}
 
 {% block content %}
 
@@ -70,7 +70,5 @@
 </form>
 </div>
 </div>
-
-    {% endif %}
 
 {% endblock %}
