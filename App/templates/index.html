@@ -9,7 +9,8 @@
     <p>Should have a search bar that at least searches by name. Menu should include a login/signup button or new publication</p>
 {% endblock %} -->
 
-{% block content %}
+{% block loggedin %}
+
     {% if current_user.is_aunthenticated %}
     <ul id="nav-mobile" class="left">
     <li><a href="/App/templates/index.html">DAC Publication Listing</a></li>
