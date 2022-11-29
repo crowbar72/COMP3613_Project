@@ -9,7 +9,7 @@
     <p>Should have a search bar that at least searches by name. Menu should include a login/signup button or new publication</p>
 {% endblock %} -->
 
-{% block loggedin %}
+{% block content %}
 
     {% if current_user.is_aunthenticated %}
     <ul id="nav-mobile" class="left">
@@ -30,10 +30,7 @@
 
     {% endif %}
     
-{% endblock %}
 
-
-{% block loggedout %}
 
 <ul id="nav-mobile" class="left">
 <li><a href="/App/templates/index.html">DAC Publication Listing</a></li>
@@ -44,9 +41,6 @@
 </ul>
 
 
-{% endblock %}
-
-{% block content %}
 
 <form method="POST" action="/App/templates/index.html">
 <div class="row">
