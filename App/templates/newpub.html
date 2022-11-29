@@ -4,13 +4,12 @@
 
 {{ super() }}
 
-<!-- {% block content %}
-    <h1>New publication page</h1>
-    <p>Fields for a new publication to go here. Should have button for home page</p>
-{% endblock %} -->
+
 
 {% block content %}
-    {% if current_user.is_aunthenticated %}
+
+    
+
     <ul id="nav-mobile" class="left">
     <li><a href="/App/templates/index.html">DAC Publication Listing</a></li>
     </ul>
@@ -24,10 +23,10 @@
     </ul>
 
     <ul id="nav-mobile" class="left">
-    <h4> {{ current_user.username }}  </h4>
+    <h4>   </h4>
     </ul>
 
-    <h2>Create Publication for: {{current_user.name}}</h2>
+    <h2>Create Publication for: </h2>
 
     <main class="container">
         <form class="card col s12" id="loginForm" method="POST" action="/App/templates/index.html" style="padding:1em">
