@@ -41,9 +41,19 @@ def get_author_publications(id):
         return []
     return author.get_publications()
 
-def getpublicationtree(id):
+def get_author_publication_tree(id, treeList):
     author = get_author(id)
     if not author:
         return []
-    return author.get_publications()
+    treeList.append(author.id)
+    publications = author.publications
+    for publication in publications:
+        coauthors = publication.coauthors
+        for coauthor in coauthors:
+            coauthorId = coauthor.id
+            newList = []
+            if treeList.__contains__(coauthorId):
+                return treeList
+            treeList = treeList + get_author_publication_tree(coauthorId, newList)
+    return treeList
     
