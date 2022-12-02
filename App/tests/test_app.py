@@ -1,4 +1,4 @@
-import os, tempfile, pytest, logging, unittest
+import os, tempfile, pytest, logging
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from datetime import *
@@ -30,165 +30,196 @@ LOGGER = logging.getLogger(__name__)
    Unit Tests
 '''
 ## Fixtures ##
-@pytest.fixture
-def setup_User_1():
-    testUsername = "bob"
-    testPassword = "bobpass"
-    testID = 1
-    user1 = User(testUsername, testPassword, testID)
-    return user1
 
-@pytest.fixture
-def setup_User_2():
-    testUsername = "rick"
-    testPassword = "bobpass"
-    testID = 2
-    user2 = User(testUsername, testPassword, testID)
-    return user2
+# This fixture creates an empty database for the test and deletes it after the test
+# scope="class" would execute the fixture once and resued for all methods in the class.
+# This is for the integration tests!
+@pytest.fixture(autouse=True, scope="module")
+def empty_db():
+    app.config.update({'TESTING': True, 'SQLALCHEMY_DATABASE_URI': 'sqlite:///test.db'})
+    create_db(app)
+    yield app.test_client()
+    os.unlink(os.getcwd()+'/App/test.db')
+
+@pytest.fixture()
+def username_1():
+    return "bob"
+
+@pytest.fixture()
+def username_2():
+    return "rick"
+
+@pytest.fixture()
+def name_1():
+    return "bob"
+
+@pytest.fixture()
+def name_2():
+    return "rick"
+
+@pytest.fixture()
+def password():
+    return "speakFriendAndEnter"
+
+@pytest.fixture()
+def ID_1():
+    return 1
+
+@pytest.fixture()
+def ID_2():
+    return 2
+
+@pytest.fixture()
+def DoB():
+    return datetime.strptime("05/08/2001 00:00:00", "%d/%m/%Y %H:%M:%S")
+
+@pytest.fixture()
+def qualification_1():
+    return "BSc. Computer Science"
+
+@pytest.fixture()
+def qualification_2():
+    return "MSc. Computer Science"
+
+@pytest.fixture()
+def title_1():
+    return "Argonian Literature in The Elder Scrolls series: an Anaysis."
+
+@pytest.fixture()
+def userT(username_1, password, ID_1):
+    user = User(username_1, password, ID_1)
+    return user
+
+@pytest.fixture()
+def userT2(username_2, password, ID_2):
+    user = User(username_2, password, ID_2)
+    return user
+
+@pytest.fixture()
+def authorT(name_1, DoB, qualification_1):
+    author = Author(name_1, DoB, qualification_1)
+    return author
+
+@pytest.fixture()
+def authorT2(name_2, DoB, qualification_2):
+    author = Author(name_2, DoB, qualification_2)
+    return author
+
+@pytest.fixture()
+def pubTest(title_1, ID_1, authorT2):
+    coauthors = []
+    coauthors.append(authorT2)
+    publication = Publication(title_1, ID_1, coauthors)
+    return publication
+
+
 ## end fixtures ## 
+#----------------#
 
+class TestUserUnit():
 
-class UserUnitTests():
+    def test_isTXT(self, username_1):
+        print(username_1)
+        assert username_1 == 'bob'
+    
+    def test_new_user(self, userT):
+        assert userT.username == 'bob'
 
-    def test_new_user(setup_User):
-        assert user.username == "bob"
-
-    def test_user_toJSON(setup_User):
-        user_json = user.toJSON()
+    def test_user_toJSON(self, userT):
+        user_json = userT.toJSON()
         assert user_json == {"id":None, "username":"bob", "authorId":1}
     
-    def test_hashed_password(self):
+    def test_hashed_password(self, userT, password):
         hashed = generate_password_hash(password, method='sha256')
-        assert user.password != password
+        assert userT.password != "speakFriendAndEnter"
 
-    def test_check_password(self):
-        assert user.check_password(password)
+    def test_check_password(self, userT, password):
+        assert userT.check_password(password)
 
-class AuthorUnitTests(unittest.TestCase):
+class TestAuthorUnit():
 
-    def test_new_author(setupAuthor):
-        assert author.name == "Bob Moog" and author.dob == datetime.strptime("05/08/2001", "%d/%m/%Y") and author.qualifications == "BSc. Computer Science"
+    def test_new_author(self, name_1, DoB, qualification_1):
+        author = Author(name_1, DoB, qualification_1)
+        assert author.name == "bob" and author.dob == datetime.strptime("05/08/2001", "%d/%m/%Y") and author.qualifications == "BSc. Computer Science"
 
-    def test_author_toJSON(self):
+    def test_author_toJSON(self, name_1, DoB, qualification_1):
+        author = Author(name_1, DoB, qualification_1)
         author_json = author.toJSON()
-        self.assertDictEqual(author_json, {
+        assert author_json == {
             "id": None,
-            "name": "Bob Moog",
+            "name": "bob",
             "dob": datetime.strptime("05/08/2001", "%d/%m/%Y"),
             "qualifications": "BSc. Computer Science"
-        })
+        }
 
-class PublicationUnitTests(unittest.TestCase):
-    def test_new_publication(self):
-        coauthors = []
-        author = Author("Bob Moog", "05/08/2001", "BSc. Computer Science")
-        coauthor = Author("Bob Dule", "06/09/2002", "BSc. Computer Engineering")
-        coauthors.append(coauthor)
-        publication = Publication("Intro to Computer Science", author.id, coauthors)
-        assert (
-            publication.title=="Intro to Computer Science" 
-            and publication.authorId==author.id
-            and publication.coauthors==coauthors
-        )
+class TestPublicationUnit():
 
-    def test_publication_toJSON(self):
-        coauthors = []
-        author = Author("Bob Moog", "05/08/2001", "BSc. Computer Science")
-        coauthor = Author("Bob Dule", "06/09/2002", "BSc. Computer Engineering")
-        coauthors.append(coauthor)
-        publication = Publication("Intro to Computer Science", author.id, coauthors)
-        publication_json = publication.toJSON()
-        self.assertDictEqual(publication_json, {
+    def test_new_publication(self, pubTest, authorT2):
+        assert pubTest.title=="Argonian Literature in The Elder Scrolls series: an Anaysis." and pubTest.authorId==1 and pubTest.coauthors==[authorT2]
+
+    def test_publication_toJSON(self, pubTest):
+        publication_json = pubTest.toJSON()
+        assert publication_json == {
             "id": None,
-            "title": "Intro to Computer Science",
-            "author": None,
-            "coauthors": [coauthor.toJSON() for coauthor in coauthors]
-        })
+            "title": "Argonian Literature in The Elder Scrolls series: an Anaysis.",
+            "author": 1,
+            "coauthors": [coauthor.toJSON() for coauthor in pubTest.coauthors]
+        }
 
 '''
     Integration Tests
 '''
 
-# This fixture creates an empty database for the test and deletes it after the test
-# scope="class" would execute the fixture once and resued for all methods in the class
-@pytest.fixture(autouse=True, scope="module")
-def empty_db():
-    app.config.update({'TESTING': True, 'SQLALCHEMY_DATABASE_URI': 'sqlite:///test.db'})
-    create_db(app)
-    create_all(app)
-    yield app.test_client()
-    os.unlink(os.getcwd()+'/App/test.db')
-
-@pytest.fixture(scope="module")
-def setup_Authors():
-    #author 1
-    testName1 = "Bob Moog"
-    testDoB1 = "05/08/2001"
-    testQualifications1 = "BSc. Computer Science"
-    author1 = Author(testName1, testDoB1, testQualifications1)
-
-    #author 2
-    testName2 = "Bob Moog"
-    testDoB2 = "05/08/2001"
-    testQualifications2 = "BSc. Computer Science"
-    author2 = Author(testName2, testDoB2, testQualifications2)
-    
-
-
-
 # def test_authenticate():
 #     user = create_user("bob", "bobpass")
 #     assert authenticate("bob", "bobpass") != None
 
-class UsersIntegrationTests():
-    def test_authenticate(setup_User_1):
-        assert authenticate("bob", "bobpass") != None
+class TestUsersIntegration():
+    #def test_authenticate(self, userT):
+    #   assert authenticate(userT.username, userT.password) != None
 
-    def test_create_user(setup_User_2):
-        # user = create_user("bob", "bobpass")
-        assert user.username == "rick"
+    def test_create_user(self, userT):
+        user = create_user(userT.username, userT.password, userT.authorId)
+        assert user.username == "bob"
 
-    def test_get_all_users_json(setup_User_1, setup_User_2):
+    def test_get_all_users_json(self, userT2):
+        user1 = create_user(userT2.username, userT2.password, userT2.authorId)
         users_json = get_all_users_json()
         assert [{"id":1, "username":"bob", "authorId":1}, {"id":2, "username":"rick", "authorId":2}] == users_json
 
     # Tests data changes in the database
-    def test_update_user(setup_User_1):
+    def test_update_user(self, username_1, password, ID_1):
+        user = create_user(username_1, password, ID_1)
         update_user(1, "ronnie")
         user = get_user(1)
         assert user.username == "ronnie"
 
+class TestAuthorIntegration():
+    def test_create_author(self, authorT, DoB):
+        author = create_author(authorT.name, DoB, authorT.qualifications)
+        assert author.name == "bob"
 
-class AuthorIntegrationTests():
-    def test_create_author(setup_Author):
-        assert author.name == "Bob Moog"
-
-    def test_get_all_authors_json(setup_Author):
-        author_json=get_all_authors_json()
-        self.assertListEqual([{
+    def test_get_all_authors_json(self):
+        author_json = get_all_authors_json()
+        assert [{
             'id': 1,
-            "name": "Bob Moog",
-            "dob":datetime.strptime("05/08/2001", "%d/%m/%Y"),
+            "name": "bob",
+            "dob": datetime.strptime("05/08/2001 00:00:00", "%d/%m/%Y %H:%M:%S"),
             "qualifications":"BSc. Computer Science"
-            }
-            ], author_json)
+            }] == author_json
 
-class PublicationIntegrationTests():
-    def test_create_publication(setup_Author):
-        author = get_author(1)
-        if not author:
-            author = create_author("Bob Moog", "05/08/2001", "BSc. Computer Science")
-        coauthors = []
-        publication=create_publication("Intro to Computer Science",author.id, coauthors)
-        assert publication.title=="Intro to Computer Science"
+class TestPublicationIntegration():
+    def test_create_publication(self, pubTest):
+        assert pubTest.title=="Argonian Literature in The Elder Scrolls series: an Anaysis."
 
-    def test_get_publication_json(self):
+    def test_get_publication_json(self, pubTest, authorT2):
+        pub = create_publication(pubTest.title, pubTest.authorId, pubTest.coauthors)
         publication_json = get_all_publications_json()
-        self.assertListEqual([
+        assert [
             {
                 "id": 1,
-                "title":"Intro to Computer Science",
+                "title":"Argonian Literature in The Elder Scrolls series: an Anaysis.",
                 "author":1,
-                "coauthors":[]
+                "coauthors":[authorT2.toJSON()]
             }
-        ], publication_json)
+        ] == publication_json

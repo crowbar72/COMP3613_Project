@@ -14,7 +14,7 @@ class Author(db.Model):
     def __init__(self, name, dob, qualifications):
         self.name = name
         if dob:
-            self.dob = datetime.strptime(dob, "%d/%m/%Y")
+            self.dob = datetime.strptime(dob.strftime("%d/%m/%Y %H:%M:%S"), "%d/%m/%Y %H:%M:%S") #convert dob to string so it
         if qualifications:
             self.qualifications = qualifications
 
