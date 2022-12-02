@@ -8,24 +8,6 @@
 
 {% block content %}
 
-    
-
-    <ul id="nav-mobile" class="left">
-    <li><a href="/">DAC Publication Listing</a></li>
-    </ul>
-
-    <ul id="nav-mobile" class="right">
-    <li><a href="/pubtree">Publication Tree</a></li>
-    </ul>
-        
-    <ul id="nav-mobile" class="right">
-    <li><a href="/newpub">Create Publication</a></li>
-    </ul>
-
-    <ul id="nav-mobile" class="left">
-    <h4>   </h4>
-    </ul>
-
     <h2>Create Publication for: </h2>
 
     <main class="container">
@@ -50,24 +32,24 @@
         <div class="row">
         </div>
 
-        <div class="row">
-        <div class="input-field col s12">
-        <textarea placeholder="Co-Authors" name="coauthors" rows="5" cols="50">
-        <label for="coauthors"></label>
-        </div>
-        </div>
+        <div>
+        <label for="coauthors">Co-Authors</label>
 
-        
+        <textarea id="coauthors" name="coauthors" rows="4" cols="50">
+        </textarea>
 
-        <div class="row">
         </div>
 
         <div class="row">
-        <div class="input-field col s12">
-        <input placeholder="Abstract" name="abstract" type="textarea">
-        <label for="abstract"></label>
         </div>
-        </div>
+
+        <div>
+            <label for="abstract">Abstract</label>
+    
+            <textarea id="abstract" name="abstract" rows="4" cols="50">
+            </textarea>
+    
+            </div>
 
         <div class="card-action">
         <input type="submit" class="blue text-white btn">
