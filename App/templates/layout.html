@@ -13,21 +13,6 @@
 
   </head>
   <body>
-    <nav class="purple">
-      <div class="nav-wrapper">
-        <a href="#!" class="brand-logo center">{% block page %}{% endblock %}</a>
-        <div class="nav-wrapper">
-            <ul id="nav-mobile" class="left">
-                <li><a href="/">Home</a></li>
-                <li><a href="/signuppage">Signup</a></li>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/newpub">Newpub</a></li>
-                <li><a href="/results">Search Results</a></li>
-                <li><a href="/pubtree">Pubtree</a></li>
-            </ul>
-        </div>
-      </div>
-    </nav>
     
     {% with messages = get_flashed_messages() %}
     {% if messages %}
