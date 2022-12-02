@@ -3,8 +3,14 @@ from App.database import db
 
 def create_user(username, password, authorId):
     newuser = User(username=username, password=password, authorId=authorId)
+    author = Author.query.filter_by(name=name).first()
+    author.id = authorId
+    
+    
+    
     db.session.add(newuser)
     db.session.commit()
+
     return newuser
 
 def get_user_by_username(username):
