@@ -3,7 +3,7 @@ from App.database import db
 
 
 def create_user(username, password, authorId, name):
-    newuser = User(username=username, password=password, authorId=authorId)
+    newuser = User(username=username, password=password, authorId=authorId, name = name)
     author = Author.query.filter_by(name=name).first()
     author.id = authorId
     
