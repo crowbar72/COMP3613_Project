@@ -179,12 +179,11 @@ class TestUsersIntegration():
         user = create_user(username_1, password, ID_1)
         assert authenticate(username_1, password) != None
         
-    def test_create_user(self, userT):
-        user = create_user(userT.username, userT.password, userT.authorId)
-        assert user.username == "bob"
+    def test_create_user(self, userT2):
+        user = create_user(userT2.username, userT2.password, userT2.authorId)
+        assert user.username == "rick"
 
     def test_get_all_users_json(self, userT2):
-        user1 = create_user(userT2.username, userT2.password, userT2.authorId)
         users_json = get_all_users_json()
         assert [{"id":1, "username":"bob", "authorId":1}, {"id":2, "username":"rick", "authorId":2}] == users_json
 
