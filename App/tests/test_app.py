@@ -175,9 +175,10 @@ class TestPublicationUnit():
 #     assert authenticate("bob", "bobpass") != None
 
 class TestUsersIntegration():
-    #def test_authenticate(self, userT):
-    #   assert authenticate(userT.username, userT.password) != None
-
+    def test_authenticate(self, username_1, password, ID_1):
+        user = create_user(username_1, password, ID_1)
+        assert authenticate(username_1, password) != None
+        
     def test_create_user(self, userT):
         user = create_user(userT.username, userT.password, userT.authorId)
         assert user.username == "bob"
