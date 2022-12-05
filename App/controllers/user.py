@@ -2,8 +2,8 @@ from App.models import User, Author
 from App.database import db
 
 
-def create_user(username, password, authorId, name):
-    newuser = User(username=username, password=password, authorId=authorId, name = name)
+def create_user(username, password, authorId):
+    newuser = User(username=username, password=password, authorId=authorId)
     author = Author.query.filter_by(name=name).first()
     author.id = authorId
     

@@ -11,9 +11,11 @@ class Publication(db.Model):
     abstract = db.Column(db.String(200), nullable=False, unique=True)
     dateOfPublication = db.Column(db.Date, nullable=False, unique=True)
 
-    def __init__(self, title, authorId, coauthors):
+    def __init__(self, title, authorId, coauthors, abstract, dateOfPublication):
         self.title = title
         self.authorId = authorId
+        self.abstract = abstract
+        self.dateOfPublication = dateOfPublication
         if coauthors:
             self.coauthors.extend(coauthors)
     
