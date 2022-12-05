@@ -1,5 +1,11 @@
 from flask import Blueprint, redirect, render_template, request, send_from_directory
 
+from App.controllers import (
+    PubtreeForm,
+    get_author_by_name,
+    get_author_publication_tree
+)
+
 index_views = Blueprint('index_views', __name__, template_folder='../templates')
 
 @index_views.route('/', methods=['GET'])
@@ -24,4 +30,22 @@ def search_results_page():
 
 @index_views.route('/pubtree', methods=['GET'])
 def publication_tree_page():
-    return render_template('pubtree.html')
+    form = PubtreeForm()
+    return render_template('pubtree.html', form=form)
+
+@index_views.route('/pubtree', methods=['POST'])
+def publication_tree_search():
+    form = PubtreeForm()
+    if form.validate_on_submit():
+        data = request.form
+        user = get_author_by_name(data["AuthorName"])
+        if user is not None:
+            treeList = []
+            treeList = getpublicationtree(user.id, treeList)
+            authorList = []
+            for id in treeList:
+                author = get_author(id)
+                authorList.append(author.toJSON())
+            jsonify(authorList)
+            return render_template('pubtree.html', form=form, tree=authorList)
+    return render_template('pubtree.html', form=form)

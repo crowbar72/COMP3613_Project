@@ -5,18 +5,19 @@
 {{ super() }}
 
 {% block content %}
-<nav class="purple">
-    <div class="nav-wrapper">
-        <a href="/" class="brand-logo left"> DAC Publication Listing</a>
-          <ul id="nav-mobile" class="right">
-              <li><a href="/signuppage">Signup/Login</a></li>
-              <li><a href="/newpub">Create Publication</a></li>
-              <li><a href="/pubtree">Publication Tree</a></li>
-          </ul>
-      </div>
-    </div>
-  </nav>
 
-    <h1>Pubtree page</h1>
-    <p>Search feature for author</p>
+    <h3>Publication Tree</h3>
+    <form method="POST" action="/pubtree">
+        <div class="row">
+            <div class="input-field col s12">
+                <input placeholder="Author Name" name="AuthorName" type="text">
+                <input type="submit" value="Submit">
+            </div>
+        </div>
+    </form>
+
+    <div class="col s12 m2">
+        {{tree}}
+    </div>
+
 {% endblock %}
