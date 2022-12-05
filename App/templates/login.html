@@ -2,23 +2,23 @@
 {% block title %}DAC Publication Listing{% endblock %}
 {% block page %}DAC Publication Listing{% endblock %}
 
-{% block link%}
-<ul id="nav-mobile" class="right">
-<li><a href="/App/templates/signup.html">Signup</a></li>
-</ul>
-
-<ul id="nav-mobile" class="left">
-<li><a href="/App/templates/index.html">DAC Publication Listing</a></li>
-</ul>
-
-{% endblock %}
 
 {{ super() }}
 
 
 {% block content %}
+
+<nav class="purple">
+      <div class="nav-wrapper">
+        <a href="/" class="brand-logo left"> DAC Publication Listing</a>
+          <ul id="nav-mobile" class="left">
+          </ul>
+      </div>
+    </div>
+  </nav>
+
 <main class="container">
-<form class="card col s12" id="loginForm" method="POST" action="/App/templates/index.html" style="padding:1em">
+<form class="card col s12" id="loginForm" method="POST" action="/" style="padding:1em">
 <div class="row">
 <div class="input-field col s12">
 <input placeholder="" name="username" type="text" class="validate">
@@ -36,6 +36,11 @@
 <div class="card-action">
 <input type="submit" class="blue text-white btn">
 </div>
+
+<div class="row">
+    <li><a href="/signuppage">Don't Have an Account? Signup Here</a></li>
+</div>
+
 </form>
 </main>
 {% endblock %}

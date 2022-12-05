@@ -7,29 +7,21 @@
 
 
 {% block content %}
-
-    
-
-    <ul id="nav-mobile" class="left">
-    <li><a href="/App/templates/index.html">DAC Publication Listing</a></li>
-    </ul>
-
-    <ul id="nav-mobile" class="right">
-    <li><a href="/App/templates/pubtree.html">Publication Tree</a></li>
-    </ul>
-        
-    <ul id="nav-mobile" class="right">
-    <li><a href="/App/templates/newpub.html">Create Publication</a></li>
-    </ul>
-
-    <ul id="nav-mobile" class="left">
-    <h4>   </h4>
-    </ul>
+<nav class="purple">
+      <div class="nav-wrapper">
+        <a href="/" class="brand-logo left"> DAC Publication Listing</a>
+          <ul id="nav-mobile" class="right">
+              <li><a href="/newpub">Create Publication</a></li>
+              <li><a href="/pubtree">Publication Tree</a></li>
+          </ul>
+      </div>
+    </div>
+  </nav>
 
     <h2>Create Publication for: </h2>
 
     <main class="container">
-        <form class="card col s12" id="loginForm" method="POST" action="/App/templates/index.html" style="padding:1em">
+        <form class="card col s12" id="loginForm" method="POST" action="/index" style="padding:1em">
         <div class="row">
         <div class="input-field col s12">
         <input placeholder="Title" name="title" type="text">
@@ -42,37 +34,32 @@
 
         <div class="row">
         <div class="input-field col s12">
-        <input placeholder="Date of Publication" name="DOP" type="text">
-        <label for="DOP"></label>
+        <input placeholder="" name="dateofpublication" type= "date" class="validate">
+        <label for="dateofpublication">Date of Publication</label>
         </div>
         </div>
 
         <div class="row">
         </div>
 
-        <div class="row">
-        <div class="input-field col s12">
-        <input placeholder="Date of Publication" name="DOP" type="text">
-        <label for="DOP"></label>
-        </div>
-        </div>
+        <div>
+        <label for="coauthors">Co-Authors</label>
 
-        <div class="row">
-        <div class="input-field col s12">
-        <input placeholder="Co-Authors" name="coauthors" type="textarea">
-        <label for="coauthors"></label>
-        </div>
+        <textarea id="coauthors" name="coauthors" rows="4" cols="50">
+        </textarea>
+
         </div>
 
         <div class="row">
         </div>
 
-        <div class="row">
-        <div class="input-field col s12">
-        <input placeholder="Abstract" name="abstract" type="textarea">
-        <label for="abstract"></label>
-        </div>
-        </div>
+        <div>
+            <label for="abstract">Abstract</label>
+    
+            <textarea id="abstract" name="abstract" rows="4" cols="50">
+            </textarea>
+    
+            </div>
 
         <div class="card-action">
         <input type="submit" class="blue text-white btn">
