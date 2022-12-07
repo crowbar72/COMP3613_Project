@@ -6,10 +6,8 @@ class User(db.Model):
     username =  db.Column(db.String, nullable=False)
     password = db.Column(db.String(120), nullable=False)
     authorId = db.Column(db.Integer, db.ForeignKey('author.id'), nullable=False)
-    name = db.Column(db.String(120), nullable = False, unique = False)#people can have thee same name, so it cannot be unique
 
-    def __init__(self, name, username, password, authorId):
-        self.name = name
+    def __init__(self, username, password, authorId):
         self.username = username
         self.set_password(password)
         self.authorId = authorId
