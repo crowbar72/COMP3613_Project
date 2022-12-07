@@ -95,13 +95,13 @@ def publication_Date():
     return now
 
 @pytest.fixture()
-def userT(name_1, username_1, password, ID_1):
-    user = User(name_1, username_1, password, ID_1)
+def userT( username_1, password, ID_1):
+    user = User( username_1, password, ID_1)
     return user
 
 @pytest.fixture()
-def userT2(name_2, username_2, password, ID_2):
-    user = User(name_2, username_2, password, ID_2)
+def userT2( username_2, password, ID_2):
+    user = User( username_2, password, ID_2)
     return user
 
 @pytest.fixture()
@@ -178,12 +178,12 @@ class TestPublicationUnit():
 '''
 
 class TestUsersIntegration():
-    def test_authenticate(self, name_1, username_1, password, ID_1):
-        user = create_user(name_1, username_1, password, ID_1)
+    def test_authenticate(self, username_1, password, ID_1):
+        user = create_user(username_1, password, ID_1)
         assert authenticate(username_1, password) != None
         
     def test_create_user(self, userT2):
-        user = create_user(userT2.name, userT2.username, userT2.password, userT2.authorId)
+        user = create_user(userT2.username, userT2.password, userT2.authorId)
         assert user.username == "rick"
 
     def test_get_all_users_json(self, userT2):
@@ -191,8 +191,8 @@ class TestUsersIntegration():
         assert [{"id":1, "username":"bob", "authorId":1}, {"id":2, "username":"rick", "authorId":2}] == users_json
 
     # Tests data changes in the database
-    def test_update_user(self, name_1, username_1, password, ID_1):
-        user = create_user(name_1, username_1, password, ID_1)
+    def test_update_user(self, username_1, password, ID_1):
+        user = create_user(username_1, password, ID_1)
         update_user(1, "ronnie")
         user = get_user(1)
         assert user.username == "ronnie"
