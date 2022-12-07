@@ -68,6 +68,22 @@ Test Commands
 
 test = AppGroup('test', help='Testing commands') 
 
+@test.command("unit", help="Run unit tests")
+@click.argument("type", default="all")
+def user_tests_command(type):
+    if type == "unit":
+        sys.exit(pytest.main(["-k", "UnitTests"]))
+    else:
+        sys.exit(pytest.main(["-k", "Unit"]))
+
+@test.command("int", help="Run integration tests")
+@click.argument("type", default="all")
+def user_tests_command(type):
+    if type == "int":
+        sys.exit(pytest.main(["-k", "IntegrationTests"]))
+    else:
+        sys.exit(pytest.main(["-k", "integration"]))
+
 @test.command("user", help="Run User tests")
 @click.argument("type", default="all")
 def user_tests_command(type):
