@@ -86,13 +86,22 @@ def title_1():
     return "Argonian Literature in The Elder Scrolls series: an Anaysis."
 
 @pytest.fixture()
-def userT(username_1, password, ID_1):
-    user = User(username_1, password, ID_1)
+def abstract():
+    return "Bethesda writers are arguably some of the most hardcore nerds in the industry. Rivalling the likes of J.R.R. Tolkien, these career creatives designed a lore delivery system for the elder scroll series that functions on collecting..."
+
+@pytest.fixture()
+def publication_Date():
+    now = date.today()
+    return now
+
+@pytest.fixture()
+def userT(name_1, username_1, password, ID_1):
+    user = User(name_1, username_1, password, ID_1)
     return user
 
 @pytest.fixture()
-def userT2(username_2, password, ID_2):
-    user = User(username_2, password, ID_2)
+def userT2(name_2, username_2, password, ID_2):
+    user = User(name_2, username_2, password, ID_2)
     return user
 
 @pytest.fixture()
@@ -106,10 +115,10 @@ def authorT2(name_2, DoB, qualification_2):
     return author
 
 @pytest.fixture()
-def pubTest(title_1, ID_1, authorT2):
+def pubTest(title_1, ID_1, authorT2, publication_Date, abstract):
     coauthors = []
     coauthors.append(authorT2)
-    publication = Publication(title_1, ID_1, coauthors)
+    publication = Publication(title_1, ID_1, coauthors, abstract, publication_Date)
     return publication
 
 
@@ -117,10 +126,6 @@ def pubTest(title_1, ID_1, authorT2):
 #----------------#
 
 class TestUserUnit():
-
-    def test_isTXT(self, username_1):
-        print(username_1)
-        assert username_1 == 'bob'
     
     def test_new_user(self, userT):
         assert userT.username == 'bob'
@@ -163,24 +168,22 @@ class TestPublicationUnit():
             "id": None,
             "title": "Argonian Literature in The Elder Scrolls series: an Anaysis.",
             "author": 1,
-            "coauthors": [coauthor.toJSON() for coauthor in pubTest.coauthors]
+            "coauthors": [coauthor.toJSON() for coauthor in pubTest.coauthors],
+            "abstract":"Bethesda writers are arguably some of the most hardcore nerds in the industry. Rivalling the likes of J.R.R. Tolkien, these career creatives designed a lore delivery system for the elder scroll series that functions on collecting...",
+            "dateOfPublication": date.today()
         }
 
 '''
     Integration Tests
 '''
 
-# def test_authenticate():
-#     user = create_user("bob", "bobpass")
-#     assert authenticate("bob", "bobpass") != None
-
 class TestUsersIntegration():
-    def test_authenticate(self, username_1, password, ID_1):
-        user = create_user(username_1, password, ID_1)
+    def test_authenticate(self, name_1, username_1, password, ID_1):
+        user = create_user(name_1, username_1, password, ID_1)
         assert authenticate(username_1, password) != None
         
     def test_create_user(self, userT2):
-        user = create_user(userT2.username, userT2.password, userT2.authorId)
+        user = create_user(userT2.name, userT2.username, userT2.password, userT2.authorId)
         assert user.username == "rick"
 
     def test_get_all_users_json(self, userT2):
@@ -188,8 +191,8 @@ class TestUsersIntegration():
         assert [{"id":1, "username":"bob", "authorId":1}, {"id":2, "username":"rick", "authorId":2}] == users_json
 
     # Tests data changes in the database
-    def test_update_user(self, username_1, password, ID_1):
-        user = create_user(username_1, password, ID_1)
+    def test_update_user(self, name_1, username_1, password, ID_1):
+        user = create_user(name_1, username_1, password, ID_1)
         update_user(1, "ronnie")
         user = get_user(1)
         assert user.username == "ronnie"
@@ -213,13 +216,17 @@ class TestPublicationIntegration():
         assert pubTest.title=="Argonian Literature in The Elder Scrolls series: an Anaysis."
 
     def test_get_publication_json(self, pubTest, authorT2):
-        pub = create_publication(pubTest.title, pubTest.authorId, pubTest.coauthors)
+        pub = create_publication(pubTest.title, pubTest.authorId, pubTest.coauthors, pubTest.abstract, pubTest.dateOfPublication)
         publication_json = get_all_publications_json()
         assert [
             {
                 "id": 1,
                 "title":"Argonian Literature in The Elder Scrolls series: an Anaysis.",
                 "author":1,
-                "coauthors":[authorT2.toJSON()]
-            }
+                "coauthors":[authorT2.toJSON()],
+                "abstract":"Bethesda writers are arguably some of the most hardcore nerds in the industry. Rivalling the likes of J.R.R. Tolkien, these career creatives designed a lore delivery system for the elder scroll series that functions on collecting...",
+                "dateOfPublication": date.today()
+            } 
         ] == publication_json
+        #I think date of publication fails here in the off chance that you create the fixture at 11:59pm and then this runs at 12:00 am. That's one hell of an edge case, though.
+            
